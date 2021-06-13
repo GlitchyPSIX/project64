@@ -14,72 +14,14 @@ CProjectSupport::CProjectSupport() :
 
 bool CProjectSupport::RequestCode(const char * Email)
 {
-    if (Email == nullptr || strlen(Email) == 0 || _stricmp(Email, "thank you from project64") == 0)
-    {
-        return false;
-    }
-    stdstr_f PostData("task=RequestCode&email=%s&machine=%s", Email, MachineID());
-    std::vector<std::string> Headers;
-    DWORD StatusCode;
-    if (!PerformRequest(L"/index.php?option=com_project64", PostData, StatusCode, Headers))
-    {
-        return false;
-    }
-    if (StatusCode == 200)
-    {
-        for (size_t i = 0, n = Headers.size(); i < n; i++)
-        {
-            if (strcmp(Headers[i].c_str(), "Email: Sent") == 0)
-            {
-                return true;
-            }
-        }
-    }
     return false;
 }
 
 bool CProjectSupport::ValidateCode(const char * Code)
 {
-    stdstr_f PostData("task=ValidateCode&code=%s&machine=%s", Code, MachineID());
-    std::vector<std::string> Headers;
-    DWORD StatusCode;
-    if (PerformRequest(L"/index.php?option=com_project64", PostData, StatusCode, Headers) && StatusCode == 200)
-    {
-        std::string Name, Email;
-        struct
-        {
-            const char * Key;
-            std::string & Value;
-        }
-        Test[] =
-        {
-            { "SupporterName: ", Name },
-            { "SupporterEmail: ", Email },
-        };
-
-        for (size_t i = 0, n = Headers.size(); i < n; i++)
-        {
-            for (size_t t = 0; t < sizeof(Test) / sizeof(Test[0]); t++)
-            {
-                size_t KeyLen = strlen(Test[t].Key);
-                if (strncmp(Headers[i].c_str(), Test[t].Key, KeyLen) == 0)
-                {
-                    Test[t].Value = stdstr(&Headers[i][KeyLen]).Trim();
-                    break;
-                }
-            }
-        }
-
-        if (Email.length() > 0)
-        {
-            strncpy(m_SupportInfo.Code, Code, sizeof(m_SupportInfo.Code));
-            strncpy(m_SupportInfo.Email, Email.c_str(), sizeof(m_SupportInfo.Email));
-            strncpy(m_SupportInfo.Name, Name.c_str(), sizeof(m_SupportInfo.Name));
-            m_SupportInfo.Validated = true;
-            SaveSupportInfo();
-        }
-    } 
-    return m_SupportInfo.Validated;
+    m_SupportInfo.Validated = true;
+    SaveSupportInfo();
+    return true;
 }
 
 std::string CProjectSupport::GenerateMachineID(void)
@@ -284,13 +226,12 @@ void CProjectSupport::LoadSupportInfo(void)
 
     if (OutData.size() == sizeof(SupportInfo) + 32)
     {
-        SupportInfo * Info = (SupportInfo *)OutData.data();
-        const char * CurrentHash = (const char *)(OutData.data() + sizeof(SupportInfo));
-        std::string hash = MD5((const unsigned char *)Info, sizeof(SupportInfo)).hex_digest();
-        if (strcmp(hash.c_str(), CurrentHash) == 0 && strcmp(Info->MachineID, MachineID.c_str()) == 0)
+        SupportInfo* Info = (SupportInfo*)OutData.data();
+        const char* CurrentHash = (const char*)(OutData.data() + sizeof(SupportInfo));
+        std::string hash = MD5((const unsigned char*)Info, sizeof(SupportInfo)).hex_digest();
+        if (strcmp(hash.c_str(), CurrentHash) == 0)
         {
             memcpy(&m_SupportInfo, Info, sizeof(SupportInfo));
         }
     }
-    strcpy(m_SupportInfo.MachineID, MachineID.c_str());
 }

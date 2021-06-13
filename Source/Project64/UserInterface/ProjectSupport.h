@@ -6,10 +6,6 @@ class CProjectSupport
 {
     typedef struct
     {
-        char Code[300];
-        char Email[300];
-        char Name[300];
-        char MachineID[300];
         uint32_t RunCount;
         time_t LastUpdated;
         time_t LastShown;
@@ -25,8 +21,6 @@ public:
     bool ShowSuppotWindow();
 
     inline uint32_t RunCount() const { return m_SupportInfo.RunCount; }
-    inline const char * Name(void) const { return m_SupportInfo.Name; }
-    inline const char * MachineID(void) const { return m_SupportInfo.MachineID; }
     inline bool Validated(void) const { return m_SupportInfo.Validated; }
 
 private:

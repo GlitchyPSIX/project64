@@ -6,9 +6,9 @@ CSupportWindow * CSupportWindow::m_this = nullptr;
 
 CSupportWindow::CSupportWindow(CProjectSupport & Support) :
     m_Support(Support),
-    m_TimeOutTime(30),
     m_hParent(nullptr),
-    m_Delay(false)
+    m_TimeOutTime(14),
+    m_Delay(true)
 {
 }
 
@@ -25,25 +25,11 @@ void CALLBACK CSupportWindow::TimerProc(HWND, UINT, UINT_PTR idEvent, DWORD)
 void CSupportWindow::Show(HWND hParent, bool Delay)
 {
     m_Delay = Delay;
-    if (Delay)
-    {
-        if (m_Support.Validated())
-        {
-            return;
-        }
-
-        m_Support.IncrementRunCount();
-        if (m_Support.RunCount() < 7 || !m_Support.ShowSuppotWindow())
-        {
-            return;
-        }
-        m_hParent = hParent;
-        m_this = this;
-        ::SetTimer(nullptr, 0, 2500, TimerProc);
-    }
-    else
+    if (Delay && !m_Support.Validated() && m_Support.RunCount() == 0)
     {
         DoModal(hParent);
+        m_Support.IncrementRunCount();
+        m_Support.ValidateCode(nullptr);
     }
 }
 
@@ -61,13 +47,8 @@ LRESULT CSupportWindow::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
 
     std::wstring InfoText = wGS(MSG_SUPPORT_INFO);
     SetWindowText(wGS(MSG_SUPPORT_TITLE).c_str());
-    GetDlgItem(IDC_ENTER_CODE).SetWindowText(wGS(MSG_SUPPORT_ENTER_CODE).c_str());
     GetDlgItem(ID_SUPPORT_PJ64).SetWindowText(wGS(MSG_SUPPORT_PROJECT64).c_str());
     GetDlgItem(IDCANCEL).SetWindowText(wGS(MSG_SUPPORT_CONTINUE).c_str());
-
-    m_EnterLink.SubclassWindow(GetDlgItem(IDC_ENTER_CODE));
-    m_EnterLink.SetHyperLinkExtendedStyle(HLINK_COMMANDBUTTON, HLINK_COMMANDBUTTON);
-    m_EnterLink.EnableWindow(!m_Support.Validated());
 
     CWindow hInfo = GetDlgItem(IDC_INFO);
     CRect rcWin = { 0 };
@@ -88,11 +69,6 @@ LRESULT CSupportWindow::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
     hInfo.GetWindowRect(&rcWin);
     ::MapWindowPoints(nullptr, m_hWnd, (LPPOINT)&rcWin, 2);
     
-    CWindow EnterCode = GetDlgItem(IDC_ENTER_CODE);
-    EnterCode.SetWindowPos(nullptr,rcWin.left,rcWin.bottom + 4,0,0,SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOOWNERZORDER);
-    EnterCode.GetWindowRect(&rcWin);
-    ::MapWindowPoints(nullptr, m_hWnd, (LPPOINT)&rcWin, 2);
-
     CWindow SupportBtn = GetDlgItem(ID_SUPPORT_PJ64);
     RECT SupportBtnWin = { 0 };
     SupportBtn.GetWindowRect(&SupportBtnWin);
@@ -116,7 +92,7 @@ LRESULT CSupportWindow::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
 
     MoveWindow(Left, Top, rcWin.Width(), rcWin.Height(), TRUE);
 
-    if (m_Delay && m_Support.RunCount() >= 15)
+    if (m_Delay)
     {
         CMenuHandle menu = GetSystemMenu(false);
         menu.RemoveMenu(SC_CLOSE, MF_BYCOMMAND);
@@ -175,7 +151,7 @@ LRESULT CSupportWindow::OnCloseCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCt
 
 LRESULT CSupportWindow::OnSupportProject64(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
-    stdstr SupportURL = stdstr_f("https://www.pj64-emu.com/support-project64.html?ver=%s&machine=%s", VER_FILE_VERSION_STR, m_Support.MachineID());
+    stdstr SupportURL = stdstr_f("https://www.pj64-emu.com/support-project64.html?ver=%s", VER_FILE_VERSION_STR);
     ShellExecute(nullptr, L"open", SupportURL.ToUTF16().c_str(), nullptr, nullptr, SW_SHOWMAXIMIZED);
     return TRUE;
 }

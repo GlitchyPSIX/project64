@@ -12,9 +12,9 @@ LRESULT CAboutDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     m_Logo.SetBitmap(MAKEINTRESOURCE(IDB_ABOUT_LOGO));
 
     stdstr AboutMsg;
-    if (m_Support.Validated() && strlen(m_Support.Name()) > 0)
+    if (m_Support.Validated())
     {
-        AboutMsg += stdstr_f("Thank you %s for the support!\n\n", m_Support.Name());
+        AboutMsg += stdstr("Hi, Glitchy here. You won't see a donation nag window. Please support PJ64.\n\n");
     }
     AboutMsg += "Project64 is a completely free and open-source emulator for the Nintendo 64 and 64DD written in C++.\n\nCapable of playing your favorite N64 games on your PC with high-definition graphics, excellent compatibility, save states, built - in cheat codes, and more!";
 

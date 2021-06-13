@@ -38,6 +38,7 @@ private:
 CSupportEnterCode::CSupportEnterCode(CProjectSupport & Support) :
     m_Support(Support)
 {
+    
 }
 
 LRESULT CSupportEnterCode::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
@@ -50,7 +51,7 @@ LRESULT CSupportEnterCode::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM
 
     std::wstring DescriptionText = wGS(MSG_SUPPORT_ENTER_CODE_DESC);
     hDescription.SetWindowText(DescriptionText.c_str());
-    MachineId.SetWindowText(stdstr(m_Support.MachineID()).ToUTF16().c_str());
+    MachineId.SetWindowText(stdstr_f("cracked xddd").ToUTF16().c_str());
     OkBtn.SetWindowText(wGS(MSG_SUPPORT_OK).c_str());
     CancelBtn.SetWindowText(wGS(MSG_SUPPORT_CANCEL).c_str());
 

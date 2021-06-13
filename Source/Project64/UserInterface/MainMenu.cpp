@@ -1284,7 +1284,6 @@ void CMainMenu::FillOutMenu(HMENU hMenu)
 
     // Help menu
     MenuItemList HelpMenu;
-    HelpMenu.push_back(MENU_ITEM(ID_HELP_SUPPORT_PROJECT64, MENU_SUPPORT_PROJECT64));
     HelpMenu.push_back(MENU_ITEM(ID_HELP_DISCORD, MENU_DISCORD));
     HelpMenu.push_back(MENU_ITEM(ID_HELP_WEBSITE, MENU_WEBSITE));
     HelpMenu.push_back(MENU_ITEM(SPLITER));

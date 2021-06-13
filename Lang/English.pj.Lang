@@ -4,8 +4,8 @@
 //About DLL
 #1  #  "English"		// LANGUAGE ID
 #2  #  "Zilmar"			// Author
-#3  #  "3.0"			// Version
-#4  #  "November, 2020"		// Date
+#3  #  "3.0-N"			// Version
+#4  #  "November, 2021"		// Date
 
 //About DLL Dialog
 #5  #  "Current Language"
@@ -459,11 +459,11 @@
 /*********************************************************************************
 * Support Window                                                                 *
 *********************************************************************************/
-#1200#  "Support Project64"
-#1201#  "Project64 is a free and open source Nintendo64 emulator. This allows you to play real N64 software in much the same way as it would be on the original hardware system.\n\nI am sorry about the inconvenience of this prompt, but you are being asked to wait for a few seconds in order to enjoy the result of hundreds of hours of work.\n\nIf you can and would like to support Project64 or you have gotten some value out of it then please support project64 as either a thank you, or your a desire to see removal of this prompt.\n\nIf you have supported Project64:"
-#1202#  "Enter/Request Notification Code"
+#1200#  "PLEASE SUPPORT PROJECT64"
+#1201#  "You know why you downloaded this Project64 version, so then you might be asking: Why am I reading this?\n\nQuiet down, small person, this will appear only once, then never again.\n\nThe reason Project64 now includes a nagware style donation dialog that inconveniences you from playing every now and then is likely because Zilmar and the rest of the Project64 contributors are working very hard this and aren't getting as much revenue as they really deserve.\nSee, like, that's hard, isn't it? Zilmar himself has stated that this donation popup has helped earn more money.\n\nI know it's annoying and all, but can you - whenever possible - support Zilmar, and get a legit activation code for Project64?\n\nThank you for respecting this principle."
+#1202#  "hi zilmar"
 #1203#  "Support Project64"
-#1204#  "Continue"
+#1204#  "I understand"
 #1205#  "Please enter the support code"
 #1206#  "Failed to validate the code\n\nMake sure the code matches in email based on your machine"
 #1207#  "Thank you"

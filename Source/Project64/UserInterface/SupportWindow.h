@@ -38,8 +38,6 @@ private:
 
     void EnableContinue();
 
-    CHyperLink m_EnterLink;
-
     static void CALLBACK TimerProc(HWND, UINT, UINT_PTR idEvent, DWORD);
 
     CProjectSupport & m_Support;
